@@ -1,5 +1,7 @@
 Small SphinxSearch/Manticore UDF function to enable, get X within GROUP type situations. 
 
+######################################
+
 For example:
 SELECT * FROM gridimage GROUP BY auser_id;
 
@@ -7,10 +9,21 @@ returns you 1 single row for each auser_id.
 
 But how to get multiple rows per user? Enter withinfirstx() UDF function. Can then do
 
-SELECT auser_id,WITHINFIRSTX(auser_id,3) AS myint FROM gridimage WHERE myint = 1 ORDER BY auser_id ASC;
+    SELECT auser_id,WITHINFIRSTX(auser_id,3) AS myint FROM gridimage WHERE myint = 1 ORDER BY auser_id ASC;
 
-Which gives you at most 3 rows for each auser_id. 
+Which gives you at most 3 rows for each auser_id. The syntax is a bit convoluted as the UDF expression has to go in SELECT not in WHERE.
 
+######################################
+
+Note: Sphinx and Mangticore have **since** added 'GROUP X BY' natively, so the above query can be run more simply as
+
+     SELECT auser_id FROM gridimage GROUP 3 BY auser_id ORDER BY auser_id ASC;
+
+... getting upto three rows for each auser_id
+
+Making `WITHINFIRSTX` largely redundent. But `UNIQUESERIAL` still has some interesting uses for 'diversity' or interleaved sorting. 
+
+Some examples of UNIQUESERIAL in the sphinx forum: http://sphinxsearch.com/forum/search.html?q=UNIQUESERIAL&f=1&order=weight
 
 
 ######################################
